@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Información Escuela";
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -13,7 +14,9 @@
         <h1>Información de la academia</h1>
         <h2>Escuela</h2>
         <h3>Nombre: </h3>
-        <p>Año de Fundación: </p>
+        <p>@Model.Name</p>
+        <h3>Año de Fundación: </h3>
+        <p>@Model.FundationYear</p>
     </div>
     </body>
 </html>

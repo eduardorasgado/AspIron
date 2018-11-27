@@ -1,14 +1,19 @@
+using AspIron.Models;
 using Microsoft.AspNetCore.Mvc;
 namespace AspIron.Controllers
 {
     public class AcademyController : Controller
     {
-        // IACtionResult representa una interfaz generica
+        // IACtionResult represents a generic interface
         public IActionResult Index()
         {
-            // retornando la vista con el mismo nombre de la funcion
-            // dentro de la carpeta Academy
-            return View();
+            // a model object
+            var escuela = new Academy();
+            escuela.FundationYear = 2017;
+            escuela.Name = "AspIron";
+            // returning the view with same name as actual function
+            // inside Academy folder
+            return View(escuela);
         }
     }
 }
