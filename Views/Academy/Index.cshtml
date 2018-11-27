@@ -1,22 +1,15 @@
 @{
-    ViewData["Title"] = "Información Escuela";
-    Layout = "_Layout";
+    ViewData["Title"] = "Información de la academia";
+    Layout = "SimpleLayout";
 }
 
-<!DOCTYPE html>
-
-<html>
-    <head>
-        <title>Academy</title>
-    </head>
-    <body>
-    <div>
-        <h1>Información de la academia</h1>
-        <h2>Escuela</h2>
-        <h3>Nombre: </h3>
-        <p>@Model.Name</p>
-        <h3>Año de Fundación: </h3>
-        <p>@Model.FundationYear</p>
-    </div>
-    </body>
-</html>
+<div class="jumbotron">
+    <h1>@ViewData["Title"]</h1>
+    <h2>Escuela</h2>
+    <h3>Nombre: </h3>
+    <p>@Model.Name</p>
+    <h3>Año de Fundación: </h3>
+    <p>@Model.FundationYear</p>
+    
+    <p><i>@ViewData["DatoDinamico"]</i></p>
+</div>

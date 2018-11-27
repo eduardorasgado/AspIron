@@ -11,6 +11,7 @@ namespace AspIron.Controllers
             var escuela = new Academy {FundationYear = 2017, Name = "AspIron"};
             // returning the view with same name as actual function
             // inside Academy folder
+            ViewBag.DatoDinamico = "Curso de ASP.NET MVC";
             return View(escuela);
         }
     }
