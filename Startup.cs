@@ -60,7 +60,7 @@ namespace AspIron
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Academy}/{action=Index}/{id?}");
             });
         }
     }

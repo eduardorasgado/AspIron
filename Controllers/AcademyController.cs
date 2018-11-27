@@ -8,9 +8,7 @@ namespace AspIron.Controllers
         public IActionResult Index()
         {
             // a model object
-            var escuela = new Academy();
-            escuela.FundationYear = 2017;
-            escuela.Name = "AspIron";
+            var escuela = new Academy {FundationYear = 2017, Name = "AspIron"};
             // returning the view with same name as actual function
             // inside Academy folder
             return View(escuela);
