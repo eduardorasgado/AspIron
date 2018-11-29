@@ -1,16 +1,19 @@
 @model List<Asignatura>
 
 @{
-    ViewBag.Title = "Todas las asignaturas";
+    ViewData["Title"] = "Todas las asignaturas";
     Layout = "SimpleLayout";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
 <div class="jumbotron">
     <!--Esto es codigo razor: c# en el frontend-->
     @foreach (var asignatura in @Model)
     {
-        <partial name="AsignaturaSimple" model="asignatura"/>
+        <partial name="AcademyBaseSimple" model="asignatura"/>
+        <p>Fecha de lanzamiento del curso: <i>@asignatura.FechaDeLanzamiento</i></p>
     }
     
 </div>
