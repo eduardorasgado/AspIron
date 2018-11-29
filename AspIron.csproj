@@ -10,7 +10,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Views\Escuela" />
+      <Compile Remove="Views\Escuela\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Views\Escuela\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Views\Escuela\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Views\Escuela\**" />
     </ItemGroup>
 
 </Project>
