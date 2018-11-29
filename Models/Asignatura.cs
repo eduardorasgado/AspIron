@@ -8,6 +8,8 @@ namespace AspIron.Models
     /// </summary>
     public class Asignatura : AcademyBase
     {
+        public DateTime FechaDeLanzamiento { set; get; }
+        
         public override string ToString()
         {
             return $"Nombre: {Nombre}";

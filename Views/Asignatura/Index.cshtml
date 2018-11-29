@@ -8,7 +8,8 @@
     <h1>@ViewData["Title"]</h1>
 </div>
 <div class="jumbotron">
-    <h2>Nombre: @Model.Nombre</h2>
+    <!--De esta forma usamos una vista parcial traida desde el folder shared-->
+    <partial name="AsignaturaSimple"/>
+
     <p>Fecha de lanzamiento del curso: <i>@ViewData["FechaDeLanzamiento"]</i></p>
-    
 </div>
