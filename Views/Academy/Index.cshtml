@@ -1,3 +1,4 @@
+@model Academy
 @{
     ViewData["Title"] = "Información de la academia";
     Layout = "SimpleLayout";
@@ -10,6 +11,11 @@
     <p>@Model.Nombre</p>
     <h3>Año de Fundación: </h3>
     <p>@Model.AñoCreacion</p>
-    
+    <p>Tipo de escuela: @Model.TipoEscuela</p>
+    <address>
+        <p>Dirección: @Model.Direccion</p>
+        <p>Pais: @Model.Pais</p>
+        <p>Ciudad: @Model.Ciudad</p>
+    </address>
     <p><i>@ViewData["DatoDinamico"]</i></p>
 </div>

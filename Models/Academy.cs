@@ -19,20 +19,16 @@ namespace AspIron.Models
         // del TipoEscuelas que es un ENUM y se encuentra en entidades tambien
         public TiposEscuelas TipoEscuela { get; set; }
         
-        // array de objectos de la clase curso
-        public Curso[] CursosPrimitive { get; set; }
-        
         // coleccion de arreglos pero dentro de una lista generica
         public List<Curso> CursosLista { get; set; }
         
         public string Direccion { set; get; }
         
         // Constructor de la escuela
-        //public Escuela(string nombre, int año)
-        //{
-        //    this.nombre = nombre;
-        //    this.AñoCreacion = año;
-        //}
+        public Academy()
+        {
+            //
+        }
 
         // Constructor de tipo igualacion por tupla
         public Academy(string nombre, int año) 
