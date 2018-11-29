@@ -11,6 +11,7 @@ namespace AspIron.Controllers
         public IActionResult Index()
         {
             var alumno = new Alumno();
+            alumno.Nombre = "Pancho Perez Jacome";
             
             return View(alumno);
         }
@@ -41,8 +42,8 @@ namespace AspIron.Controllers
                 select new Alumno{Nombre = $"{n} {a1} {a2}"};
             // retornamos para asignarlo a cada uno de los cursos
             // retorna cierta cantidad y en un orden basado en el UniqueId
-            return listaAlumnos.OrderBy((alumno) => alumno.UniqueId).
-                Take(20).ToList();
+            return listaAlumnos.OrderBy((alumno) => alumno.UniqueId)
+                .ToList();
         }
     }
 }

@@ -8,9 +8,23 @@
 <div class="text-center">
     <h1>@ViewData["Title"]</h1>
 </div>
-<div class="jumbotron">
-    @foreach (var alumno in @Model)
-    {
-        <partial name="AcademyBaseSimple" model="alumno"/>
-    }
+<div class="">
+    
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Id</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var alumno in @Model)
+            {
+                <tr>
+                    <td>@alumno.Nombre</td>
+                    <td>@alumno.UniqueId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
