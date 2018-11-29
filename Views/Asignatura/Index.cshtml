@@ -4,7 +4,11 @@
     Layout = "SimpleLayout";
 }
 
-<div class="jumbotron">
+<div class="text-center">
     <h1>@ViewData["Title"]</h1>
+</div>
+<div class="jumbotron">
+    <h2>Nombre: @Model.Nombre</h2>
+    <p>Fecha de lanzamiento del curso: <i>@ViewData["FechaDeLanzamiento"]</i></p>
     
 </div>

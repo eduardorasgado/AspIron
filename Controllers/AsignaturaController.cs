@@ -1,3 +1,4 @@
+using System;
 using AspIron.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,8 +9,10 @@ namespace AspIron.Controllers
         // GET
         public IActionResult Index()
         {
-            return
-            View();
+            var asignatura1 = new Asignatura();
+            asignatura1.Nombre = "Patrones de Diseño";
+            ViewBag.FechaDeLanzamiento = DateTime.UtcNow;
+            return View(asignatura1);
         }
     }
 }
