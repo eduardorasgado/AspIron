@@ -7,20 +7,25 @@ using System.Linq;
 namespace AspIron.Controllers
 {
     public class AsignaturaController : Controller
-    {
+    {   
         private AcademyContext _context;
-
+        
         public AsignaturaController(AcademyContext context)
         {
             _context = context;
         }
+        // routing by attribute
+        // should be after constructor
+        [Route("Asignatura/Index/{asignaturaId}")]
         
-        public IActionResult Index()
+        public IActionResult Index(string asignaturaId)
         {        
             //
-            var assig = _context.Asignaturas.FirstOrDefault();
+            var assig = from asignatura in _context.Asignaturas
+                where asignatura.Id == asignaturaId
+                select asignatura;
             
-            return View(assig);
+            return View(assig.SingleOrDefault());
         }
         
         /// <summary>
