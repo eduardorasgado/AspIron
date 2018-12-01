@@ -54,7 +54,7 @@ namespace AspIron.Controllers
             return View("MultiAsignatura", allAsignaturas);
         }
 
-        private DateTime generateRandomUTC()
+        private static DateTime generateRandomUTC()
         {
             Random gen = new Random();
             DateTime start = new DateTime(2018, 1, 1);
