@@ -7,6 +7,13 @@ namespace AspIron.Controllers
 {
     public class AlumnoController : Controller
     {
+        private AcademyContext _context;
+
+        public AlumnoController(AcademyContext context)
+        {
+            // database context
+            _context = context;
+        }
         // GET
         public IActionResult Index()
         {

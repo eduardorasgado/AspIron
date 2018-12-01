@@ -43,7 +43,8 @@ namespace AspIron
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // Context to handle in Memory database
             services.AddDbContext<AcademyContext>(
-                    options => options.UseInMemoryDatabase(databaseName: "testInMem")
+                // stablishing what database we are using
+                    options => options.UseInMemoryDatabase(databaseName: "testInMemDB")
                 );
         }
 
