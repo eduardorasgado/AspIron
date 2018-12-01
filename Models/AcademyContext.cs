@@ -38,47 +38,48 @@ namespace AspIron.Models
             escuela.Pais = "México";
             escuela.TipoEscuela = TiposEscuelas.Online;
             escuela.Direccion = "Av. Naufrago #104, Colonia Morelos. Zona Cocoa.";
-
-            // adding data if we have no data
-            model_builder.Entity<Academy>().HasData(escuela);
             
             // load cursos to academy
-            CargarCursos(out var cursos);
+            CargarCursos(out var cursos, escuela);
             
             //  for each curso load asignaturas
             var asignaturas = CargarAsignaturas(cursos);
             // and load alumnos
+            var generator = new Random();
+            var alumnos = CargarAlumnos(cursos, generator);
             
             // loading evaluaciones
-            model_builder.Entity<Asignatura>().HasData(
-                //
-                new Asignatura
-                {
-                    Nombre = "Programación Básica",
-                    FechaDeLanzamiento = generateRandomUTC()
-                },
-                new Asignatura
-                {
-                    Nombre = "Cálculo Diferencial",
-                    FechaDeLanzamiento = generateRandomUTC()
-                },
-                new Asignatura
-                {
-                    Nombre = "Electrónica Digital",
-                    FechaDeLanzamiento = generateRandomUTC()
-                },
-                new Asignatura
-                {
-                    Nombre = "Lenguajes de Programación",
-                    FechaDeLanzamiento = generateRandomUTC()
-                }
-            );
-            // HasData just receives arrays so we have to
-            // convert from collection to array
-            model_builder.Entity<Alumno>().HasData(
-                    GenerarAlumnosAlAzar(20).ToArray()
-                );
+            // RETO
+            
+            // adding data if we have no data
+            model_builder.Entity<Academy>().HasData(escuela);
+            model_builder.Entity<Curso>().HasData(cursos.ToArray());
+            model_builder.Entity<Asignatura>().HasData(asignaturas.ToArray());
+            model_builder.Entity<Alumno>().HasData(alumnos.ToArray());
 
+        }
+        
+        /// <summary>
+        /// UTILITIES is a bunch of methods AcademyContext uses to
+        /// prototype and test Entity framework to Inmemory DB
+        /// </summary>
+        /// <param name="cursos"></param>
+        /// <param name="generator"></param>
+        #region Utilities
+        
+        private List<Alumno> CargarAlumnos(List<Curso> cursos, Random generator)
+        {
+            var alumnosFull = new List<Alumno>();
+            
+            foreach (var curso in cursos)
+            {
+                // random alumnos quantity for each curso
+                var numAlumnos = generator.Next(10, 30);
+                var listaAlumnosTemp = GenerarAlumnosAlAzar(numAlumnos, curso);
+                alumnosFull.AddRange(listaAlumnosTemp);
+            }
+
+            return alumnosFull;
         }
 
         private static List<Asignatura> CargarAsignaturas(List<Curso> cursos)
@@ -116,26 +117,44 @@ namespace AspIron.Models
                     }
                 };
 
-                curso.Asignaturas = tempList;
                 listaFull.AddRange(tempList);
             }
 
             return listaFull;
         }
 
-        private static void CargarCursos(out List<Curso> cursos)
+        private static void CargarCursos
+            (out List<Curso> cursos, Academy academia)
         {
             cursos = new List<Curso>
             {
-                new Curso {Nombre = "101", Jornada = TiposJornadas.Mañana},
-                new Curso {Nombre = "201", Jornada = TiposJornadas.Tarde},
-                new Curso {Nombre = "301", Jornada = TiposJornadas.Noche},
-                new Curso {Nombre = "401", Jornada = TiposJornadas.Mañana},
-                new Curso {Nombre = "501", Jornada = TiposJornadas.Weekend}
+                new Curso
+                {
+                    Nombre = "101", Jornada = TiposJornadas.Mañana,
+                    AcademyId = academia.Id,
+                },
+                new Curso
+                {
+                    Nombre = "201", Jornada = TiposJornadas.Tarde,
+                    AcademyId = academia.Id,
+                },
+                new Curso
+                {
+                    Nombre = "301", Jornada = TiposJornadas.Noche,
+                    AcademyId = academia.Id,
+                },
+                new Curso
+                {
+                    Nombre = "401", Jornada = TiposJornadas.Mañana,
+                    AcademyId = academia.Id,
+                },
+                new Curso
+                {
+                    Nombre = "501", Jornada = TiposJornadas.Weekend,
+                    AcademyId = academia.Id,
+                }
             };
         }
-
-        // UTILITIES-----------
         
         private static DateTime generateRandomUTC()
         {
@@ -147,7 +166,8 @@ namespace AspIron.Models
                 .AddHours(gen.Next(0,12));
         }
         
-        private List<Alumno> GenerarAlumnosAlAzar(int alumnosQuantity)
+        private static List<Alumno> GenerarAlumnosAlAzar
+            (int alumnosQuantity, Curso curso)
         {
             string[] nombres = {"Eduardo", "Mario", "Francisco", "Manuel", "Fabian", "Mariana", "Victor"};
             string[] apellido1 = {"Rasgado", "Guzman", "Olmedo", "Santiago", "Peña", "Jimenez", "Amampour", "Bartolo"};
@@ -161,11 +181,17 @@ namespace AspIron.Models
             var listaAlumnos = from n in nombres
                 from a1 in apellido1
                 from a2 in apellido2
-                select new Alumno{Nombre = $"{n} {a1} {a2}"};
+                select new Alumno
+                {
+                    Nombre = $"{n} {a1} {a2}",
+                    // loading relation
+                    CursoId = curso.Id
+                };
             // retornamos para asignarlo a cada uno de los cursos
             // retorna cierta cantidad y en un orden basado en el Id
             return listaAlumnos.OrderBy((alumno) => alumno.Id).Take(alumnosQuantity)
                 .ToList();
         }
+        #endregion
     }
 }
