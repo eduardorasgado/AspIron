@@ -15,8 +15,8 @@ namespace AspIron.Controllers
             _context = context;
         }
         
-        [Route("Alumno/Index")]
         [Route("Alumno/Index/{alumnoId}")]
+        [Route("Alumno/Index")]
         // GET
         public IActionResult Index(string alumnoId)
         {
@@ -24,7 +24,12 @@ namespace AspIron.Controllers
                 where alumno.Id == alumnoId
                 select alumno;
             
-            return View(alList.SingleOrDefault());
+            // validation
+            return !string.IsNullOrWhiteSpace(alumnoId)
+                // a) if MultiAlumno is called from Index, we should
+                // specify what view should we return in MultiAlumno
+                // or it will return to Index view
+                ? View(alList.SingleOrDefault()) : MultiAlumno();
         }
 
         public IActionResult MultiAlumno()
@@ -32,7 +37,8 @@ namespace AspIron.Controllers
             // collecting all alumnos data from context -> in memory database
             var listaAlumnos = _context.Alumnos.ToList();
             
-            return View(listaAlumnos);
+            // a)
+            return View("MultiAlumno", listaAlumnos);
         }
     }
 }
