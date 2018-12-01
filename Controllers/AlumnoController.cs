@@ -14,12 +14,17 @@ namespace AspIron.Controllers
             // database context
             _context = context;
         }
+        
+        [Route("Alumno/Index")]
+        [Route("Alumno/Index/{alumnoId}")]
         // GET
-        public IActionResult Index()
+        public IActionResult Index(string alumnoId)
         {
-            var alumno = _context.Alumnos.FirstOrDefault();
+            var alList = from alumno in _context.Alumnos
+                where alumno.Id == alumnoId
+                select alumno;
             
-            return View(alumno);
+            return View(alList.SingleOrDefault());
         }
 
         public IActionResult MultiAlumno()

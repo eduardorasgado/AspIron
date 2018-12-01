@@ -27,7 +27,7 @@ namespace AspIron.Controllers
                 select asignatura;
 
             // validation: if no elements to return then return the full list
-            return assig.Any() ? View(assig.SingleOrDefault()) : MultiAsignatura();
+            return !string.IsNullOrWhiteSpace(asignaturaId) ? View(assig.SingleOrDefault()) : MultiAsignatura();
         }
         
         /// <summary>
