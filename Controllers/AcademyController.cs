@@ -1,23 +1,27 @@
+using System.Linq;
 using AspIron.Models;
 using Microsoft.AspNetCore.Mvc;
 namespace AspIron.Controllers
 {
     public class AcademyController : Controller
     {
+        private AcademyContext _context;
         // IACtionResult represents a generic interface
         public IActionResult Index()
         {
-            // a model object
-            var escuela = new Academy("AspIron", 2017);
-            escuela.Ciudad = "Cd del Carmén, Campeche";
-            escuela.Pais = "México";
-            escuela.TipoEscuela = TiposEscuelas.Online;
-            escuela.Direccion = "Av. Naufrago #104, Colonia Morelos. Zona Cocoa.";
+             
+            // take database data for academy
+            var escuela = _context.Academies.FirstOrDefault();
             
-            // returning the view with same name as actual function
-            // inside Academy folder
-            ViewBag.DatoDinamico = "Curso de ASP.NET MVC";
             return View(escuela);
         }
+
+        /// <summary>
+        /// Constructor to addapt controller to be able to have
+        /// access to in memory database
+        /// </summary>
+        /// <param name="???"></param>
+        public AcademyController(AcademyContext context) 
+            => _context = context;
     }
 }
