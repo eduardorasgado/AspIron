@@ -41,6 +41,15 @@ namespace AspIron.Models
 
             // adding data if we have no data
             model_builder.Entity<Academy>().HasData(escuela);
+            
+            // load cursos to academy
+            CargarCursos(out var cursos);
+            
+            //  for each curso load asignaturas
+            var asignaturas = CargarAsignaturas(cursos);
+            // and load alumnos
+            
+            // loading evaluaciones
             model_builder.Entity<Asignatura>().HasData(
                 //
                 new Asignatura
@@ -67,11 +76,65 @@ namespace AspIron.Models
             // HasData just receives arrays so we have to
             // convert from collection to array
             model_builder.Entity<Alumno>().HasData(
-                    GenerarAlumnosAlAzar().ToArray()
+                    GenerarAlumnosAlAzar(20).ToArray()
                 );
 
         }
-        
+
+        private static List<Asignatura> CargarAsignaturas(List<Curso> cursos)
+        {
+            var listaFull = new List<Asignatura>();
+            
+            foreach (var curso in cursos)
+            {
+                
+                var tempList = new List<Asignatura>
+                {
+                    new Asignatura
+                    {
+                        Nombre = "Programación Básica",
+                        CursoId = curso.Id,
+                        FechaDeLanzamiento = generateRandomUTC()
+                    },
+                    new Asignatura
+                    {
+                        Nombre = "Cálculo Diferencial",
+                        CursoId = curso.Id,
+                        FechaDeLanzamiento = generateRandomUTC()
+                    },
+                    new Asignatura
+                    {
+                        Nombre = "Patrones de Diseño",
+                        CursoId = curso.Id,
+                        FechaDeLanzamiento = generateRandomUTC()
+                    },
+                    new Asignatura
+                    {
+                        Nombre = "Lenguajes de Programación",
+                        CursoId = curso.Id,
+                        FechaDeLanzamiento = generateRandomUTC()
+                    }
+                };
+
+                curso.Asignaturas = tempList;
+                listaFull.AddRange(tempList);
+            }
+
+            return listaFull;
+        }
+
+        private static void CargarCursos(out List<Curso> cursos)
+        {
+            cursos = new List<Curso>
+            {
+                new Curso {Nombre = "101", Jornada = TiposJornadas.Mañana},
+                new Curso {Nombre = "201", Jornada = TiposJornadas.Tarde},
+                new Curso {Nombre = "301", Jornada = TiposJornadas.Noche},
+                new Curso {Nombre = "401", Jornada = TiposJornadas.Mañana},
+                new Curso {Nombre = "501", Jornada = TiposJornadas.Weekend}
+            };
+        }
+
         // UTILITIES-----------
         
         private static DateTime generateRandomUTC()
@@ -84,7 +147,7 @@ namespace AspIron.Models
                 .AddHours(gen.Next(0,12));
         }
         
-        private List<Alumno> GenerarAlumnosAlAzar()
+        private List<Alumno> GenerarAlumnosAlAzar(int alumnosQuantity)
         {
             string[] nombres = {"Eduardo", "Mario", "Francisco", "Manuel", "Fabian", "Mariana", "Victor"};
             string[] apellido1 = {"Rasgado", "Guzman", "Olmedo", "Santiago", "Peña", "Jimenez", "Amampour", "Bartolo"};
@@ -101,7 +164,7 @@ namespace AspIron.Models
                 select new Alumno{Nombre = $"{n} {a1} {a2}"};
             // retornamos para asignarlo a cada uno de los cursos
             // retorna cierta cantidad y en un orden basado en el Id
-            return listaAlumnos.OrderBy((alumno) => alumno.Id)
+            return listaAlumnos.OrderBy((alumno) => alumno.Id).Take(alumnosQuantity)
                 .ToList();
         }
     }
