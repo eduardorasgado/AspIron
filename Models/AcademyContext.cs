@@ -72,6 +72,8 @@ namespace AspIron.Models
 
         }
         
+        // UTILITIES-----------
+        
         private static DateTime generateRandomUTC()
         {
             Random gen = new Random();
@@ -82,7 +84,6 @@ namespace AspIron.Models
                 .AddHours(gen.Next(0,12));
         }
         
-        // UTILITIES
         private List<Alumno> GenerarAlumnosAlAzar()
         {
             string[] nombres = {"Eduardo", "Mario", "Francisco", "Manuel", "Fabian", "Mariana", "Victor"};
