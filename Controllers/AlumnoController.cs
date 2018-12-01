@@ -41,8 +41,8 @@ namespace AspIron.Controllers
                 from a2 in apellido2
                 select new Alumno{Nombre = $"{n} {a1} {a2}"};
             // retornamos para asignarlo a cada uno de los cursos
-            // retorna cierta cantidad y en un orden basado en el UniqueId
-            return listaAlumnos.OrderBy((alumno) => alumno.UniqueId)
+            // retorna cierta cantidad y en un orden basado en el Id
+            return listaAlumnos.OrderBy((alumno) => alumno.Id)
                 .ToList();
         }
     }
