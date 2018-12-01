@@ -41,5 +41,10 @@ namespace AspIron.Controllers
             // a)
             return View("MultiCurso", listaCursos);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
