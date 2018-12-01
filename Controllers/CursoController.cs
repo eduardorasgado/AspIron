@@ -46,5 +46,18 @@ namespace AspIron.Controllers
         {
             return View();
         }
+        
+        [HttpPost] // this will lead the form data to be handle
+        public IActionResult Create(Curso curso)
+        {
+            var escuela = _context.Academies.FirstOrDefault();
+            // add curso to db
+            curso.AcademyId = escuela.Id;
+                
+            _context.Cursos.Add(curso);
+            _context.SaveChanges();
+            
+            return View();
+        }
     }
 }
