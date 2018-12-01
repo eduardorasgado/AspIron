@@ -17,6 +17,7 @@ namespace AspIron.Controllers
         // routing by attribute
         // should be after constructor
         [Route("Asignatura/Index/{asignaturaId}")]
+        [Route("Asignatura/Index")]
         
         public IActionResult Index(string asignaturaId)
         {        
@@ -24,8 +25,9 @@ namespace AspIron.Controllers
             var assig = from asignatura in _context.Asignaturas
                 where asignatura.Id == asignaturaId
                 select asignatura;
-            
-            return View(assig.SingleOrDefault());
+
+            // validation: if no elements to return then return the full list
+            return assig.Any() ? View(assig.SingleOrDefault()) : MultiAsignatura();
         }
         
         /// <summary>
