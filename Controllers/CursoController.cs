@@ -5,41 +5,41 @@ using System.Linq;
 
 namespace AspIron.Controllers
 {
-    public class AlumnoController : Controller
+    public class CursoController : Controller
     {
         private AcademyContext _context;
 
-        public AlumnoController(AcademyContext context)
+        public CursoController(AcademyContext context)
         {
             // database context
             _context = context;
         }
         
-        [Route("Alumno/Index/{alumnoId}")]
-        [Route("Alumno/Index")]
+        [Route("Curso/Index/{cursoId}")]
+        [Route("Curso/Index")]
         // GET
-        public IActionResult Index(string alumnoId)
+        public IActionResult Index(string cursoId)
         {
-            var alList = from alumno in _context.Alumnos
-                where alumno.Id == alumnoId
-                select alumno;
+            var alList = from curso in _context.Cursos
+                where curso.Id == cursoId
+                select curso;
             
             // validation
-            return !string.IsNullOrWhiteSpace(alumnoId)
+            return !string.IsNullOrWhiteSpace(cursoId)
                 // a)
                 // if MultiAlumno is called from Index, we should
                 // specify what view should we return in MultiAlumno
                 // or it will return to Index view
-                ? View(alList.SingleOrDefault()) : MultiAlumno();
+                ? View(alList.SingleOrDefault()) : MultiCurso();
         }
 
-        public IActionResult MultiAlumno()
+        public IActionResult MultiCurso()
         {
             // collecting all alumnos data from context -> in memory database
-            var listaAlumnos = _context.Alumnos.ToList();
+            var listaCursos = _context.Cursos.ToList();
             
             // a)
-            return View("MultiAlumno", listaAlumnos);
+            return View("MultiCurso", listaCursos);
         }
     }
 }

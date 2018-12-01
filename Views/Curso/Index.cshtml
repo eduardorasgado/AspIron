@@ -1,6 +1,6 @@
-@model Asignatura
+@model Curso
 @{
-    ViewData["Title"] = "Información de la asignatura";
+    ViewData["Title"] = "Información del curso";
     Layout = "SimpleLayout";
 }
 
@@ -10,6 +10,4 @@
 <div class="jumbotron">
     <!--De esta forma usamos una vista parcial traida desde el folder shared-->
     <partial name="AcademyBaseSimple"/>
-
-    <p>Fecha de lanzamiento del curso: <i>@Model.FechaDeLanzamiento</i></p>
 </div>
