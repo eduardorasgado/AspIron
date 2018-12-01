@@ -14,6 +14,11 @@ namespace AspIron.Models
         public List<Alumno> Alumnos { get; set; }
         public string Direccion { set; get; }
         
+        // engine automatically knows and detect what model
+        // we are using by Convention: ModelNameId
+        public string AcademyId { set; get; }
+        // to sustract academy with just the Curso instance
+        public Academy Academy { set; get; }
 
         public override string ToString()
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AspIron.Models;
 
 namespace AspIron.Models
@@ -9,6 +10,13 @@ namespace AspIron.Models
     public class Asignatura : AcademyBase
     {
         public DateTime FechaDeLanzamiento { set; get; }
+        
+        // relation is automatically detected
+        public string CursoId { set; get; }
+        public Curso Curso { set; get; }
+        
+        // down relation
+        public List<Evaluacion> Evaluaciones { set; get; }
         
         public override string ToString()
         {
