@@ -79,7 +79,6 @@ namespace AspIron.Controllers
             // validation: cursoId is available
             if (string.IsNullOrWhiteSpace(cursoId)) return MultiCurso();
             
-            
             return View(cursoResponse.SingleOrDefault());
         }
     }

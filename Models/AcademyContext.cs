@@ -126,31 +126,37 @@ namespace AspIron.Models
         private static void CargarCursos
             (out List<Curso> cursos, Academy academia)
         {
+            var gen = new Random();
             cursos = new List<Curso>
             {
                 new Curso
                 {
                     Nombre = "101", Jornada = TiposJornadas.Mañana,
+                    Direccion = $"Calle #{gen.Next(0, 100)}",
                     AcademyId = academia.Id,
                 },
                 new Curso
                 {
                     Nombre = "201", Jornada = TiposJornadas.Tarde,
+                    Direccion = $"Calle #{gen.Next(0, 100)}",
                     AcademyId = academia.Id,
                 },
                 new Curso
                 {
                     Nombre = "301", Jornada = TiposJornadas.Noche,
+                    Direccion = $"Calle #{gen.Next(0, 100)}",
                     AcademyId = academia.Id,
                 },
                 new Curso
                 {
                     Nombre = "401", Jornada = TiposJornadas.Mañana,
+                    Direccion = $"Calle #{gen.Next(0, 100)}",
                     AcademyId = academia.Id,
                 },
                 new Curso
                 {
                     Nombre = "501", Jornada = TiposJornadas.Weekend,
+                    Direccion = $"Calle #{gen.Next(0, 100)}",
                     AcademyId = academia.Id,
                 }
             };
