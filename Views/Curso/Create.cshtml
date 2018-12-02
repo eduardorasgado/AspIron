@@ -8,6 +8,10 @@
 <div>
     <h1>@ViewData["Title"]</h1>
 </div>
+
+<a class="btn btn-primary" asp-controller="Curso" asp-action="MultiCurso">Regresar</a>
+<br/><br/>
+
 <div class="row">
     <div class="col-md-6">
         <!-- Validations errors that come from controller -->
@@ -15,15 +19,15 @@
         
         <form method="POST">
             <div class="form-group">
-                <label asp-for="Nombre">Nombre</label>
+                <label asp-for="Nombre"></label>
                 <input class="form-control" asp-for="Nombre" required/>
             </div>
             <div class="form-group">
-                <label asp-for="Direccion">Dirección</label>
+                <label asp-for="Direccion"></label>
                 <input class="form-control" asp-for="Direccion" required/>
             </div>
             <div class="form-group">
-                <label asp-for="Jornada">Jornada</label>
+                <label asp-for="Jornada"></label>
 
                 @Html.DropDownList(
                     /*asp-for, enum to call*/

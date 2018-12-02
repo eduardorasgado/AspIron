@@ -132,31 +132,31 @@ namespace AspIron.Models
                 new Curso
                 {
                     Nombre = "101", Jornada = TiposJornadas.Mañana,
-                    Direccion = $"Calle #{gen.Next(0, 100)}",
+                    Direccion = $"Calle #{gen.Next(0, 100)} {gen.Next(10, 20)}° Avenida",
                     AcademyId = academia.Id,
                 },
                 new Curso
                 {
                     Nombre = "201", Jornada = TiposJornadas.Tarde,
-                    Direccion = $"Calle #{gen.Next(0, 100)}",
+                    Direccion = $"Calle #{gen.Next(0, 100)} {gen.Next(10, 20)}° Avenida",
                     AcademyId = academia.Id,
                 },
                 new Curso
                 {
                     Nombre = "301", Jornada = TiposJornadas.Noche,
-                    Direccion = $"Calle #{gen.Next(0, 100)}",
+                    Direccion = $"Calle #{gen.Next(0, 100)} {gen.Next(10, 20)}° Avenida",
                     AcademyId = academia.Id,
                 },
                 new Curso
                 {
                     Nombre = "401", Jornada = TiposJornadas.Mañana,
-                    Direccion = $"Calle #{gen.Next(0, 100)}",
+                    Direccion = $"Calle #{gen.Next(0, 100)} {gen.Next(10, 20)}° Avenida",
                     AcademyId = academia.Id,
                 },
                 new Curso
                 {
                     Nombre = "501", Jornada = TiposJornadas.Weekend,
-                    Direccion = $"Calle #{gen.Next(0, 100)}",
+                    Direccion = $"Calle #{gen.Next(0, 100)} {gen.Next(10, 20)}° Avenida",
                     AcademyId = academia.Id,
                 }
             };
