@@ -8,6 +8,9 @@
     <h1>@ViewData["Title"]</h1>
 </div>
 <div class="jumbotron">
+    @if(ViewData["MensajeExtra"] != null){
+        <div class="alert-success">@ViewData["MensajeExtra"]</div>
+    }
     <!--De esta forma usamos una vista parcial traida desde el folder shared-->
     <partial name="AcademyBaseSimple"/>
 </div>

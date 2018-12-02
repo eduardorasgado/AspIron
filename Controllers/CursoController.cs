@@ -61,6 +61,7 @@ namespace AspIron.Controllers
                 
             _context.Cursos.Add(curso);
             _context.SaveChanges();
+            ViewBag.MensajeExtra = "Curso Creado con éxito!";
             
             // return to individual view(Note: Not method Index,
             // Index view instead)
