@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspIron.Models
 {
@@ -8,7 +9,13 @@ namespace AspIron.Models
     /// que tiene una Escuela.
     /// </summary>
     public class Curso : AcademyBase
-    {   
+    {
+        // Data Anotation to declare Nombre attribute to be 
+        // required
+        [Required]
+        // the virtual attribute in base
+        public override string Nombre { get; set; }
+        
         public TiposJornadas Jornada { get; set; }
         public List<Asignatura> Asignaturas { get; set; }
         public List<Alumno> Alumnos { get; set; }

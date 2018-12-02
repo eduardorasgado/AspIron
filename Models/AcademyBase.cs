@@ -8,7 +8,7 @@ namespace AspIron.Models
     /// </summary>
     public abstract class AcademyBase
     {
-        public string Nombre { set; get; }
+        public virtual string Nombre { set; get; }
         public string Id { private set; get; }
 
         public AcademyBase() => Id = Guid.NewGuid().ToString();

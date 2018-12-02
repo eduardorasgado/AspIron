@@ -50,6 +50,11 @@ namespace AspIron.Controllers
         [HttpPost] // this will lead the form data to be handle
         public IActionResult Create(Curso curso)
         {
+            // if model is corrupted
+            // corrupted -> [Required] data annotation in Curso model
+            // is not checked
+            if (!ModelState.IsValid) return View(curso);
+            
             var escuela = _context.Academies.FirstOrDefault();
             // add curso to db
             curso.AcademyId = escuela.Id;
@@ -57,7 +62,9 @@ namespace AspIron.Controllers
             _context.Cursos.Add(curso);
             _context.SaveChanges();
             
-            return View();
+            // return to individual view(Note: Not method Index,
+            // Index view instead)
+            return View("Index", curso);
         }
     }
 }
