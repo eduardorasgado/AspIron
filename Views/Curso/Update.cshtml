@@ -13,14 +13,15 @@
         <!-- Validations errors that come from controller -->
         <div class="alert-warning" asp-validation-summary="All"></div>
         
-        <form method="POST">
+        <form method="POST" asp-controller="Curso" asp-action="UpdatePost">
+            <!--input type="hidden" asp-for="Id" name="Id"-->
             <div class="form-group">
                 <label asp-for="Nombre">Nombre</label>
-                <input class="form-control" asp-for="Nombre" required/>
+                <input type="text" class="form-control" asp-for="Nombre" required/>
             </div>
             <div class="form-group">
                 <label asp-for="Direccion">Dirección</label>
-                <input class="form-control" asp-for="Direccion" required/>
+                <input type="text" class="form-control" asp-for="Direccion" required/>
             </div>
             <div class="form-group">
                 <label asp-for="Jornada">Jornada</label>

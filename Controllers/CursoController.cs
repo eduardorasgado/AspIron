@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using AspIron.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspIron.Controllers
 {
@@ -80,6 +82,41 @@ namespace AspIron.Controllers
             if (string.IsNullOrWhiteSpace(cursoId)) return MultiCurso();
             
             return View(cursoResponse.SingleOrDefault());
+        }
+
+
+        [Route("Curso/Update/{cursoId}")]
+        [HttpPost]
+        public IActionResult UpdatePost(string cursoId, Curso cursoForm)
+        {   
+            // validating all required data
+            if (!ModelState.IsValid) return MultiCurso();
+
+            // search and extract the course to be updated
+            // from db
+            var modelCurso = _context.Cursos
+                .SingleOrDefault(c => c.Id == cursoId);
+            
+            // updating fields
+            if (modelCurso == null)
+            {
+                // in case curso does not exist
+                return MultiCurso();
+            }
+            modelCurso.Nombre = cursoForm.Nombre;
+            modelCurso.Direccion = cursoForm.Direccion;
+            modelCurso.Jornada = cursoForm.Jornada;
+            
+            // saving updated data
+            _context.SaveChanges();
+            
+            ViewBag.MensajeExtra = "Curso Actualizado con éxito!";
+            
+            // return to individual view(Note: Not method Index,
+            // Index view instead)
+            // add the course searched
+            var curso = _context.Cursos.Find(cursoId);
+            return View("Index",curso);
         }
     }
 }
