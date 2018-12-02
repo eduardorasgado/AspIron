@@ -89,8 +89,10 @@ namespace AspIron.Controllers
         [HttpPost]
         public IActionResult UpdatePost(string cursoId, Curso cursoForm)
         {   
+            var curso = _context.Cursos.Find(cursoId);
+            
             // validating all required data
-            if (!ModelState.IsValid) return MultiCurso();
+            if (!ModelState.IsValid) return View("Update", curso);
 
             // search and extract the course to be updated
             // from db
@@ -98,11 +100,9 @@ namespace AspIron.Controllers
                 .SingleOrDefault(c => c.Id == cursoId);
             
             // updating fields
-            if (modelCurso == null)
-            {
-                // in case curso does not exist
-                return MultiCurso();
-            }
+            // in case curso does not exist
+            if (modelCurso == null) return MultiCurso();
+
             modelCurso.Nombre = cursoForm.Nombre;
             modelCurso.Direccion = cursoForm.Direccion;
             modelCurso.Jornada = cursoForm.Jornada;
@@ -115,7 +115,6 @@ namespace AspIron.Controllers
             // return to individual view(Note: Not method Index,
             // Index view instead)
             // add the course searched
-            var curso = _context.Cursos.Find(cursoId);
             return View("Index",curso);
         }
     }
