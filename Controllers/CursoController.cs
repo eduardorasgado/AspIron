@@ -1,156 +1,159 @@
 using System;
 using System.Collections.Generic;
-using AspIron.Models;
-using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using AspIron.Models;
 
 namespace AspIron.Controllers
 {
     public class CursoController : Controller
     {
-        private AcademyContext _context;
+        private readonly AcademyContext _context;
 
         public CursoController(AcademyContext context)
         {
-            // database context
             _context = context;
         }
-        
-        [Route("Curso/Index/{cursoId}")]
-        [Route("Curso/Index")]
-        // GET
-        public IActionResult Index(string cursoId)
+
+        // GET: Curso
+        public async Task<IActionResult> Index()
         {
-            var alList = from curso in _context.Cursos
-                where curso.Id == cursoId
-                select curso;
-            
-            // validation
-            return !string.IsNullOrWhiteSpace(cursoId)
-                // a)
-                // if MultiAlumno is called from Index, we should
-                // specify what view should we return in MultiAlumno
-                // or it will return to Index view
-                ? View(alList.SingleOrDefault()) : MultiCurso();
+            var academyContext = _context.Cursos.Include(c => c.Academy);
+            return View(await academyContext.ToListAsync());
         }
 
-        public IActionResult MultiCurso()
+        // GET: Curso/Details/5
+        public async Task<IActionResult> Details(string id)
         {
-            // collecting all alumnos data from context -> in memory database
-            var listaCursos = _context.Cursos.ToList();
-            
-            // a)
-            return View("MultiCurso", listaCursos);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var curso = await _context.Cursos
+                .Include(c => c.Academy)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (curso == null)
+            {
+                return NotFound();
+            }
+
+            return View(curso);
         }
 
+        // GET: Curso/Create
         public IActionResult Create()
         {
+            ViewData["AcademyId"] = new SelectList(_context.Academies, "Id", "Id");
             return View();
         }
-        
-        [HttpPost] // this will lead the form data to be handle
-        public IActionResult Create(Curso curso)
-        {
-            // if model is corrupted
-            // corrupted -> [Required] data annotation in Curso model
-            // is not checked
-            if (!ModelState.IsValid) return View(curso);
 
-            // checking if name is not repeated in db
-            var actionResult = CheckRepeatedName(curso);
-            if (actionResult != null) return actionResult;
-
-            var escuela = _context.Academies.FirstOrDefault();
-            // add curso to db
-            curso.AcademyId = escuela.Id;
-                
-            _context.Cursos.Add(curso);
-            _context.SaveChanges();
-            ViewBag.MensajeExtra = "Curso Creado con éxito!";
-            
-            // return to individual view(Note: Not method Index,
-            // Index view instead)
-            return View("Index", curso);
-        }
-
-        [Route("Curso/Update")]
-        [Route("Curso/Update/{cursoId}")]
-        public IActionResult Update(string cursoId)
-        {
-            var cursoResponse = from curso in _context.Cursos
-                where curso.Id == cursoId
-                select curso;
-
-            // validation: cursoId is available
-            if (string.IsNullOrWhiteSpace(cursoId)) return MultiCurso();
-            
-            return View(cursoResponse.SingleOrDefault());
-        }
-
-
-        [Route("Curso/Update/{cursoId}")]
+        // POST: Curso/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public IActionResult UpdatePost(string cursoId, Curso cursoForm)
-        {   
-            // finding the course that will be updated
-            var curso = _context.Cursos.Find(cursoId);
-            
-            // validating all required data
-            if (!ModelState.IsValid) return View("Update", curso);
-            
-            // checking if name is not repeated in db
-            var actionResult = CheckRepeatedName(cursoForm, curso.Nombre);
-            if (actionResult != null) return actionResult;
-
-            // search and extract the course to be updated
-            // from db
-            var modelCurso = _context.Cursos
-                .SingleOrDefault(c => c.Id == cursoId);
-            
-            // updating fields
-            // in case curso does not exist
-            if (modelCurso == null) return MultiCurso();
-
-            modelCurso.Nombre = cursoForm.Nombre;
-            modelCurso.Direccion = cursoForm.Direccion;
-            modelCurso.Jornada = cursoForm.Jornada;
-            
-            // saving updated data
-            _context.SaveChanges();
-            
-            ViewBag.MensajeExtra = "Curso Actualizado con éxito!";
-            
-            // return to individual view(Note: Not method Index,
-            // Index view instead)
-            // add the course searched
-            return View("Index",curso);
-        }
-        
-        //UTILITIES    
-        private IActionResult CheckRepeatedName(Curso curso, string originalName="")
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Nombre,Jornada,Direccion,AcademyId,Id")] Curso curso)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var repeatedCurso = from c in _context.Cursos
-                    // filtering all courses same name as curso.Name
-                    // except itself with original name before the change
-                    where ((c.Nombre == curso.Nombre) && (curso.Nombre != originalName)) 
-                    select c;
+                _context.Add(curso);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["AcademyId"] = new SelectList(_context.Academies, "Id", "Id", curso.AcademyId);
+            return View(curso);
+        }
 
-                if (repeatedCurso.SingleOrDefault() != null)
+        // GET: Curso/Edit/5
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var curso = await _context.Cursos.FindAsync(id);
+            if (curso == null)
+            {
+                return NotFound();
+            }
+            ViewData["AcademyId"] = new SelectList(_context.Academies, "Id", "Id", curso.AcademyId);
+            return View(curso);
+        }
+
+        // POST: Curso/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("Nombre,Jornada,Direccion,AcademyId,Id")] Curso curso)
+        {
+            if (id != curso.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
                 {
-                    // in case name already exists
-                    ViewBag.MensajeExtra = "El curso ya existe, intente otro nombre.";
-                    return View("Create", curso);
+                    _context.Update(curso);
+                    await _context.SaveChangesAsync();
                 }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CursoExists(curso.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
-            catch (Exception e)
+            ViewData["AcademyId"] = new SelectList(_context.Academies, "Id", "Id", curso.AcademyId);
+            return View(curso);
+        }
+
+        // GET: Curso/Delete/5
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
             {
-                return MultiCurso();
+                return NotFound();
             }
 
-            return null;
+            var curso = await _context.Cursos
+                .Include(c => c.Academy)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (curso == null)
+            {
+                return NotFound();
+            }
+
+            return View(curso);
+        }
+
+        // POST: Curso/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var curso = await _context.Cursos.FindAsync(id);
+            _context.Cursos.Remove(curso);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool CursoExists(string id)
+        {
+            return _context.Cursos.Any(e => e.Id == id);
         }
     }
 }

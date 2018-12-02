@@ -1,15 +1,47 @@
-@model Asignatura
+@model IEnumerable<AspIron.Models.Asignatura>
+
 @{
-    ViewData["Title"] = "Información de la asignatura";
-    Layout = "SimpleLayout";
+    ViewData["Title"] = "Index";
 }
 
-<div class="text-center">
-    <h1>@ViewData["Title"]</h1>
-</div>
-<div class="jumbotron">
-    <!--De esta forma usamos una vista parcial traida desde el folder shared-->
-    <partial name="AcademyBaseSimple"/>
+<h2>Index</h2>
 
-    <p>Fecha de lanzamiento del curso: <i>@Model.FechaDeLanzamiento</i></p>
-</div>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaDeLanzamiento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Curso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDeLanzamiento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Curso.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

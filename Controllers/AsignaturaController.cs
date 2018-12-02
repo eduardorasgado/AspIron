@@ -1,46 +1,159 @@
 using System;
-using AspIron.Models;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using AspIron.Models;
 
 namespace AspIron.Controllers
 {
     public class AsignaturaController : Controller
-    {   
-        private AcademyContext _context;
-        
+    {
+        private readonly AcademyContext _context;
+
         public AsignaturaController(AcademyContext context)
         {
             _context = context;
         }
-        // routing by attribute
-        // should be after constructor
-        [Route("Asignatura/Index/{asignaturaId}")]
-        [Route("Asignatura/Index")]
-        
-        public IActionResult Index(string asignaturaId)
-        {        
-            //
-            var assig = from asignatura in _context.Asignaturas
-                where asignatura.Id == asignaturaId
-                select asignatura;
 
-            // validation: if no elements to return then return the full list
-            return !string.IsNullOrWhiteSpace(asignaturaId) ? View(assig.SingleOrDefault()) : MultiAsignatura();
-        }
-        
-        /// <summary>
-        /// TO have a global view and management of all
-        /// the asignaturas in the Academy
-        /// GET
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult MultiAsignatura()
+        // GET: Asignatura
+        public async Task<IActionResult> Index()
         {
-            var allAsignaturas = _context.Asignaturas.ToList();
-            // we can specify what view do we want to send the data to
-            return View("MultiAsignatura", allAsignaturas);
+            var academyContext = _context.Asignaturas.Include(a => a.Curso);
+            return View(await academyContext.ToListAsync());
+        }
+
+        // GET: Asignatura/Details/5
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var asignatura = await _context.Asignaturas
+                .Include(a => a.Curso)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (asignatura == null)
+            {
+                return NotFound();
+            }
+
+            return View(asignatura);
+        }
+
+        // GET: Asignatura/Create
+        public IActionResult Create()
+        {
+            ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Id");
+            return View();
+        }
+
+        // POST: Asignatura/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("FechaDeLanzamiento,CursoId,Nombre,Id")] Asignatura asignatura)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(asignatura);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Id", asignatura.CursoId);
+            return View(asignatura);
+        }
+
+        // GET: Asignatura/Edit/5
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var asignatura = await _context.Asignaturas.FindAsync(id);
+            if (asignatura == null)
+            {
+                return NotFound();
+            }
+            ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Id", asignatura.CursoId);
+            return View(asignatura);
+        }
+
+        // POST: Asignatura/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("FechaDeLanzamiento,CursoId,Nombre,Id")] Asignatura asignatura)
+        {
+            if (id != asignatura.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(asignatura);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AsignaturaExists(asignatura.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CursoId"] = new SelectList(_context.Cursos, "Id", "Id", asignatura.CursoId);
+            return View(asignatura);
+        }
+
+        // GET: Asignatura/Delete/5
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var asignatura = await _context.Asignaturas
+                .Include(a => a.Curso)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (asignatura == null)
+            {
+                return NotFound();
+            }
+
+            return View(asignatura);
+        }
+
+        // POST: Asignatura/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var asignatura = await _context.Asignaturas.FindAsync(id);
+            _context.Asignaturas.Remove(asignatura);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool AsignaturaExists(string id)
+        {
+            return _context.Asignaturas.Any(e => e.Id == id);
         }
     }
 }
