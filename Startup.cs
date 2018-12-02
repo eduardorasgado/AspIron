@@ -42,10 +42,19 @@ namespace AspIron
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             // Context to handle in Memory database
+            //services.AddDbContext<AcademyContext>(
+                // stablishing what database we are using
+            //        options => options.UseInMemoryDatabase(databaseName: "testInMemDB")
+            //    );
+
+            // to connect sqlServer
+            var connString = ConfigurationExtensions.GetConnectionString(this.Configuration,
+                "DefaultConnection");
+            
             services.AddDbContext<AcademyContext>(
                 // stablishing what database we are using
-                    options => options.UseInMemoryDatabase(databaseName: "testInMemDB")
-                );
+                options => options.UseSqlServer(connString)
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
