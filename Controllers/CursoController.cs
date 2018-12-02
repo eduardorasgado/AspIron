@@ -93,10 +93,15 @@ namespace AspIron.Controllers
         [HttpPost]
         public IActionResult UpdatePost(string cursoId, Curso cursoForm)
         {   
+            // finding the course that will be updated
             var curso = _context.Cursos.Find(cursoId);
             
             // validating all required data
             if (!ModelState.IsValid) return View("Update", curso);
+            
+            // checking if name is not repeated in db
+            var actionResult = CheckRepeatedName(cursoForm, curso.Nombre);
+            if (actionResult != null) return actionResult;
 
             // search and extract the course to be updated
             // from db
@@ -122,12 +127,15 @@ namespace AspIron.Controllers
             return View("Index",curso);
         }
         
-        private IActionResult CheckRepeatedName(Curso curso)
+        //UTILITIES    
+        private IActionResult CheckRepeatedName(Curso curso, string originalName="")
         {
             try
             {
                 var repeatedCurso = from c in _context.Cursos
-                    where c.Nombre == curso.Nombre
+                    // filtering all courses same name as curso.Name
+                    // except itself with original name before the change
+                    where ((c.Nombre == curso.Nombre) && (curso.Nombre != originalName)) 
                     select c;
 
                 if (repeatedCurso.SingleOrDefault() != null)
