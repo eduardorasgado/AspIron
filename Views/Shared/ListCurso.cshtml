@@ -1,13 +1,12 @@
-@*
-@model List<AcademyBase>
-*@
+@model List<Curso>
+
 <div class="">
-    
     <table class="table table-bordered table-hover">
         <thead>
         <tr>
             <th scope="col">Nombre</th>
             <th scope="col">Id</th>
+            <th scope="col">Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -16,6 +15,8 @@
             <tr>
                 <td>@obj.Nombre</td>
                 <td>@obj.Id</td>
+                <td><a class="btn btn-primary" asp-route-cursoId="@obj.Id" 
+                       asp-controller="Curso" asp-action="Update">Editar</a></td>
             </tr>
         }
         </tbody>

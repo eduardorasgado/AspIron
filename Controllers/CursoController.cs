@@ -67,5 +67,20 @@ namespace AspIron.Controllers
             // Index view instead)
             return View("Index", curso);
         }
+
+        [Route("Curso/Update")]
+        [Route("Curso/Update/{cursoId}")]
+        public IActionResult Update(string cursoId)
+        {
+            var cursoResponse = from curso in _context.Cursos
+                where curso.Id == cursoId
+                select curso;
+
+            // validation: cursoId is available
+            if (string.IsNullOrWhiteSpace(cursoId)) return MultiCurso();
+            
+            
+            return View(cursoResponse.SingleOrDefault());
+        }
     }
 }
