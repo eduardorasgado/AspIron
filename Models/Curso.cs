@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace AspIron.Models
 {
@@ -17,7 +18,7 @@ namespace AspIron.Models
         [StringLength(5, ErrorMessage= "El nombre del curso debe de " +
                                        "contener un máximo de cinco caracteres")]
         [MinLength(3, ErrorMessage = "La longitud minima del nombre es de" +
-                                     "3 caracteres")]
+                                     " 3 caracteres")]
         // the virtual attribute in base
         public override string Nombre { get; set; }
         

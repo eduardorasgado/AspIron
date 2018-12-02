@@ -56,7 +56,11 @@ namespace AspIron.Controllers
             // corrupted -> [Required] data annotation in Curso model
             // is not checked
             if (!ModelState.IsValid) return View(curso);
-            
+
+            // checking if name is not repeated in db
+            var actionResult = CheckRepeatedName(curso);
+            if (actionResult != null) return actionResult;
+
             var escuela = _context.Academies.FirstOrDefault();
             // add curso to db
             curso.AcademyId = escuela.Id;
@@ -116,6 +120,29 @@ namespace AspIron.Controllers
             // Index view instead)
             // add the course searched
             return View("Index",curso);
+        }
+        
+        private IActionResult CheckRepeatedName(Curso curso)
+        {
+            try
+            {
+                var repeatedCurso = from c in _context.Cursos
+                    where c.Nombre == curso.Nombre
+                    select c;
+
+                if (repeatedCurso.SingleOrDefault() != null)
+                {
+                    // in case name already exists
+                    ViewBag.MensajeExtra = "El curso ya existe, intente otro nombre.";
+                    return View("Create", curso);
+                }
+            }
+            catch (Exception e)
+            {
+                return MultiCurso();
+            }
+
+            return null;
         }
     }
 }

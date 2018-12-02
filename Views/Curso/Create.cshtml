@@ -16,6 +16,10 @@
     <div class="col-md-6">
         <!-- Validations errors that come from controller -->
         <div class="alert-warning" asp-validation-summary="All"></div>
+        @if (ViewData["MensajeExtra"] != null)
+        {
+            <div class="alert-warning">@ViewData["MensajeExtra"]</div>
+        }
         
         <form method="POST">
             <div class="form-group">
